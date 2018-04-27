@@ -33,6 +33,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.io.BytesWritable;
@@ -730,8 +731,13 @@ public class ClassWriter {
         continue;
       }
 
-      sb.append("    this." + col + " = JdbcWritableBridge." +  getterMethod
-          + "(" + (i + 1) + ", __dbResults);\n");
+      if (getterMethod.equals("readString")) {
+        sb.append("    this." + col + " = StringUtils.stripEnd(JdbcWritableBridge." +  getterMethod
+                + "(" + (i + 1) + ", __dbResults), null);\n");
+      } else {
+        sb.append("    this." + col + " = JdbcWritableBridge." +  getterMethod
+                + "(" + (i + 1) + ", __dbResults);\n");
+      }
     }
 
     if (wrapInMethod) {
@@ -1917,6 +1923,7 @@ public class ClassWriter {
       sb.append(";\n");
     }
 
+    sb.append("import org.apache.commons.lang.StringUtils;\n");
     sb.append("import org.apache.hadoop.io.BytesWritable;\n");
     sb.append("import org.apache.hadoop.io.Text;\n");
     sb.append("import org.apache.hadoop.io.Writable;\n");
