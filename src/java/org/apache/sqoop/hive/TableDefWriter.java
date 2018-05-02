@@ -191,10 +191,9 @@ public class TableDefWriter {
         throw new IOException("Hive does not support the SQL type for column "
             + col);
       }
-      if ((StringUtils.equals(hiveColType, "Double") || StringUtils.equals("double", hiveColType))
-              ) {
-        hiveColType = "Decimal(20,20)";
-      }
+//      if ("double".equals(hiveColType) || "Double".equals(hiveColType)) {
+//        hiveColType = "Decimal(20,20)";
+//      }
       sb.append('`').append(col).append("` ").append(hiveColType);
 
       if (HiveTypes.isHiveTypeImprovised(colType)) {
@@ -238,6 +237,8 @@ public class TableDefWriter {
     }
 
     LOG.debug("Create statement: " + sb.toString());
+    //打LOG
+    LOG.info("Create statement: " + sb.toString());
     return sb.toString();
   }
 
