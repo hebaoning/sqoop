@@ -191,9 +191,9 @@ public class TableDefWriter {
         throw new IOException("Hive does not support the SQL type for column "
             + col);
       }
-//      if ("double".equals(hiveColType) || "Double".equals(hiveColType)) {
-//        hiveColType = "Decimal(20,20)";
-//      }
+      if (HiveTypes.isHiveTypeImprovised(colType)&&("double".equals(StringUtils.trim(hiveColType)) || "DOUBLE".equals(StringUtils.trim(hiveColType)))){
+        hiveColType = "Decimal(20,20)";
+      }
       sb.append('`').append(col).append("` ").append(hiveColType);
 
       if (HiveTypes.isHiveTypeImprovised(colType)) {
