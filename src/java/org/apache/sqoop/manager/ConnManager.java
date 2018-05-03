@@ -300,6 +300,18 @@ public abstract class ConnManager {
 
   /**
    * Return an unordered mapping from colname to sqltype for
+   * all columns in a table.
+   *
+   * 1.The Integer type id is a constant from java.sql.Types
+   * 2.column's specified column size
+   * 3.designated column's number of digits to right of the decimal point
+   */
+  public Map<String, List<Integer>> getColumnTypesWithSizeAndprecision (String tableName ){
+    return  null ;
+  }
+
+  /**
+   * Return an unordered mapping from colname to sqltype for
    * all the input arguments for a stored procedure.
    *
    * The Integer type id is a constant from java.sql.Types
