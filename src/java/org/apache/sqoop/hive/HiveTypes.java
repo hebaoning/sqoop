@@ -48,9 +48,7 @@ public final class HiveTypes {
           case Types.NVARCHAR:
           case Types.NCHAR:
           case Types.LONGNVARCHAR:
-          case Types.DATE:
           case Types.TIME:
-          case Types.TIMESTAMP:
               return "STRING";
           case Types.NUMERIC:
           case Types.DECIMAL:
@@ -68,6 +66,10 @@ public final class HiveTypes {
           case Types.BLOB:
           case Types.CLOB:
               return "BINARY";
+          case Types.TIMESTAMP:
+              return "TIMESTAMP";
+          case Types.DATE:
+              return "DATE";
           default:
         // TODO(aaron): Support BINARY, VARBINARY, LONGVARBINARY, DISTINCT,
         // BLOB, ARRAY, STRUCT, REF, JAVA_OBJECT.
