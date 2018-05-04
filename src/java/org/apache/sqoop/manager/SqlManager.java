@@ -247,6 +247,16 @@ public abstract class SqlManager
   }
 
   @Override
+  public Map<String, List<Integer>> getColumnTypesWithSizeAndprecision (String tableName) {
+    String stmt = getColTypesQuery(tableName);
+    Map<String, List<Integer>> colInfo = getColumnInfoForRawQuery(stmt);
+    if (colInfo == null) {
+      return null;
+    }
+    return colInfo;
+  }
+
+  @Override
   public Map<String, Integer> getColumnTypesForQuery(String query) {
     // Manipulate the query to return immediately, with zero rows.
     String rawQuery = query.replace(SUBSTITUTE_TOKEN, " (1 = 0) ");

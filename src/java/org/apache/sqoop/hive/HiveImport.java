@@ -187,6 +187,7 @@ public class HiveImport {
         inputTableName, outputTableName,
         configuration, !debugMode);
     String createTableStr = tableWriter.getCreateTableStmt() + ";\n";
+    LOG.info("createTableStr:" + createTableStr);
     String loadDataStmtStr = tableWriter.getLoadDataStmt() + ";\n";
     Path finalPath = tableWriter.getFinalPath();
 

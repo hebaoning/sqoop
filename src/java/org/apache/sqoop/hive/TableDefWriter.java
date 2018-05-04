@@ -21,6 +21,7 @@ package org.apache.sqoop.hive;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Date;
 import java.text.DateFormat;
@@ -79,13 +80,13 @@ public class TableDefWriter {
     this.commentsEnabled = withComments;
   }
 
-  private Map<String, Integer> externalColTypes;
+  private Map<String, List<Integer>> externalColTypes;
 
   /**
    * Set the column type map to be used.
    * (dependency injection for testing; not used in production.)
    */
-  public void setColumnTypes(Map<String, Integer> colTypes) {
+  public void setColumnTypes(Map<String, List<Integer>> colTypes) {
     this.externalColTypes = colTypes;
     LOG.debug("Using test-controlled type map");
   }
@@ -116,7 +117,7 @@ public class TableDefWriter {
    * @return the CREATE TABLE statement for the table to load into hive.
    */
   public String getCreateTableStmt() throws IOException {
-    Map<String, Integer> columnTypes;
+    Map<String, List<Integer>> columnTypes;
     Properties userMapping = options.getMapColumnHive();
     Boolean isHiveExternalTableSet = !StringUtils.isBlank(options.getHiveExternalTableDir());
     if (externalColTypes != null) {
@@ -125,11 +126,13 @@ public class TableDefWriter {
     } else {
       // Get these from the database.
       if (null != inputTableName) {
-        columnTypes = connManager.getColumnTypes(inputTableName);
+        columnTypes = connManager.getColumnTypesWithSizeAndprecision(inputTableName);
       } else {
-        columnTypes = connManager.getColumnTypesForQuery(options.getSqlQuery());
+        LOG.error("This database does not support free-form query column types.");
+        return null;
       }
     }
+    LOG.info(columnTypes.toString());
 
     String [] colNames = getColumnNames();
     StringBuilder sb = new StringBuilder();
@@ -182,7 +185,7 @@ public class TableDefWriter {
 
       first = false;
 
-      Integer colType = columnTypes.get(col);
+      Integer colType = columnTypes.get(col).get(0);
       String hiveColType = userMapping.getProperty(col);
       if (hiveColType == null) {
         hiveColType = connManager.toHiveType(inputTableName, col, colType);
@@ -191,7 +194,12 @@ public class TableDefWriter {
         throw new IOException("Hive does not support the SQL type for column "
             + col);
       }
-
+      if (HiveTypes.isHiveTypeImprovised(colType)&&("double".equals(StringUtils.trim(hiveColType))
+              || "DOUBLE".equals(StringUtils.trim(hiveColType)))){
+        int precision = columnTypes.get(col).get(1);
+        int scale = columnTypes.get(col).get(2);
+        hiveColType = "Decimal("+precision+","+scale+")";
+      }
       sb.append('`').append(col).append("` ").append(hiveColType);
 
       if (HiveTypes.isHiveTypeImprovised(colType)) {
@@ -235,6 +243,8 @@ public class TableDefWriter {
     }
 
     LOG.debug("Create statement: " + sb.toString());
+    //打LOG
+    LOG.info("Create statement: " + sb.toString());
     return sb.toString();
   }
 
