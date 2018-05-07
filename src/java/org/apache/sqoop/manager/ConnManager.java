@@ -306,7 +306,7 @@ public abstract class ConnManager {
    * 2.column's specified column size
    * 3.designated column's number of digits to right of the decimal point
    */
-  public Map<String, List<Integer>> getColumnTypesWithSizeAndprecision (String tableName ){
+  public Map<String, List<Integer>> getColumnTypesWithSizeAndprecision(String tableName ){
     return  null ;
   }
 

@@ -247,7 +247,7 @@ public abstract class SqlManager
   }
 
   @Override
-  public Map<String, List<Integer>> getColumnTypesWithSizeAndprecision (String tableName) {
+  public Map<String, List<Integer>> getColumnTypesWithSizeAndprecision(String tableName) {
     String stmt = getColTypesQuery(tableName);
     Map<String, List<Integer>> colInfo = getColumnInfoForRawQuery(stmt);
     if (colInfo == null) {
