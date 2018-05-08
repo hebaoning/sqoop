@@ -238,9 +238,9 @@ public class TableDefWriter {
 
     if (isHiveExternalTableSet) {
       // add location
-      sb.append(" LOCATION '" + options.getHiveExternalTableDir() + "'");
+      sb.append(" LOCATION '"+options.getHiveExternalTableDir()+"'");
     }
-    
+
     return sb.toString();
   }
 
