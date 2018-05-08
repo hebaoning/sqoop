@@ -126,13 +126,13 @@ public class TableDefWriter {
     } else {
       // Get these from the database.
       if (null != inputTableName) {
-        columnTypes = connManager.getColumnTypesWithSizeAndprecision(inputTableName);
+        columnTypes = connManager.getColumnInfo(inputTableName);
       } else {
         LOG.error("This database does not support free-form query column types.");
         return null;
       }
     }
-    LOG.info(columnTypes.toString());
+    LOG.debug(columnTypes.toString());
 
     String [] colNames = getColumnNames();
     StringBuilder sb = new StringBuilder();
@@ -194,11 +194,10 @@ public class TableDefWriter {
         throw new IOException("Hive does not support the SQL type for column "
             + col);
       }
-      if (HiveTypes.isHiveTypeImprovised(colType)&&("double".equals(StringUtils.trim(hiveColType))
-              || "DOUBLE".equals(StringUtils.trim(hiveColType)))){
+      if ("DECIMAL".equals(hiveColType)){
         int precision = columnTypes.get(col).get(1);
         int scale = columnTypes.get(col).get(2);
-        hiveColType = "Decimal("+precision+","+scale+")";
+        hiveColType = "DECIMAL("+precision+","+scale+")";
       }
       sb.append('`').append(col).append("` ").append(hiveColType);
 
@@ -239,12 +238,9 @@ public class TableDefWriter {
 
     if (isHiveExternalTableSet) {
       // add location
-      sb.append(" LOCATION '"+options.getHiveExternalTableDir()+"'");
+      sb.append(" LOCATION '" + options.getHiveExternalTableDir() + "'");
     }
-
-    LOG.debug("Create statement: " + sb.toString());
-    //打LOG
-    LOG.info("Create statement: " + sb.toString());
+    
     return sb.toString();
   }
 
