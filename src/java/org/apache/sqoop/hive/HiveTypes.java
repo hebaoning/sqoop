@@ -52,6 +52,7 @@ public final class HiveTypes {
               return "STRING";
           case Types.NUMERIC:
           case Types.DECIMAL:
+              return "DECIMAL";
           case Types.FLOAT:
           case Types.DOUBLE:
           case Types.REAL:
