@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,12 +52,12 @@ public class TestTableDefWriter {
         map.put("id", Types.TINYINT);
         map.put("name", Types.VARCHAR);
         manager = Mockito.mock(ConnManager.class);
-        when(manager.getColumnNames(inputTableName)).thenReturn(new String[]{"id", "name"});
+        when(manager.getColumnNames(inputTableName)).thenReturn(new String[] { "id", "name" });
         when(manager.getColumnTypes(inputTableName)).thenReturn(map);
         options = new SqoopOptions(testDbUri, inputTableName);
         options.setTargetDir(testTargetDir);
         options.setHiveExternalTableDir(hdfsTableDir);
-        String[] cols = new String[]{"id", "name"};
+        String[] cols = new String[] { "id", "name" };
         options.setColumns(cols);
         options.setMapColumnHive("id=TINYINT,name=STRING");
     }
@@ -70,7 +70,7 @@ public class TestTableDefWriter {
                 options.getConf(), false);
         String stmt = tableDefWriter.getCreateTableStmt();
         Boolean isHiveExternalTableSet = !StringUtils.isBlank(options.getHiveExternalTableDir());
-        LOG.debug("External table dir: " + options.getHiveExternalTableDir());
+        LOG.debug("External table dir: "+options.getHiveExternalTableDir());
         assert (isHiveExternalTableSet && stmt.contains("CREATE EXTERNAL TABLE ") && stmt.contains("LOCATION '" + hdfsTableDir));
     }
 
@@ -82,7 +82,7 @@ public class TestTableDefWriter {
                 options.getConf(), false);
         String stmt = tableDefWriter.getCreateTableStmt();
         Boolean isHiveExternalTableSet = !StringUtils.isBlank(options.getHiveExternalTableDir());
-        LOG.debug("External table dir: " + options.getHiveExternalTableDir());
+        LOG.debug("External table dir: "+options.getHiveExternalTableDir());
         assert (!isHiveExternalTableSet && stmt.contains("CREATE TABLE "));
     }
 
@@ -95,7 +95,7 @@ public class TestTableDefWriter {
                 options.getConf(), false);
         String stmt = tableDefWriter.getCreateTableStmt();
         Boolean isHiveExternalTableSet = !StringUtils.isBlank(options.getHiveExternalTableDir());
-        LOG.debug("External table dir: " + options.getHiveExternalTableDir());
+        LOG.debug("External table dir: "+options.getHiveExternalTableDir());
         assert (isHiveExternalTableSet && stmt.contains("CREATE EXTERNAL TABLE IF NOT EXISTS") && stmt.contains("LOCATION '"
                 + hdfsTableDir));
     }
@@ -108,7 +108,7 @@ public class TestTableDefWriter {
                 options.getConf(), false);
         String stmt = tableDefWriter.getCreateTableStmt();
         Boolean isHiveExternalTableSet = !StringUtils.isBlank(options.getHiveExternalTableDir());
-        LOG.debug("External table dir: " + options.getHiveExternalTableDir());
+        LOG.debug("External table dir: "+options.getHiveExternalTableDir());
         assert (!isHiveExternalTableSet && stmt.contains("CREATE TABLE IF NOT EXISTS"));
     }
 
@@ -120,7 +120,7 @@ public class TestTableDefWriter {
                 options.getConf(), false);
         String stmt = tableDefWriter.getLoadDataStmt();
         Boolean isHiveExternalTableSet = !StringUtils.isBlank(options.getHiveExternalTableDir());
-        LOG.debug("External table dir: " + options.getHiveExternalTableDir());
+        LOG.debug("External table dir: "+options.getHiveExternalTableDir());
         assert (isHiveExternalTableSet && stmt.contains("LOAD DATA INPATH ") && stmt.contains(testTargetDir));
     }
 }
