@@ -197,7 +197,7 @@ public class TableDefWriter {
       if ("DECIMAL".equals(hiveColType)){
         int precision = columnTypes.get(col).get(1);
         int scale = columnTypes.get(col).get(2);
-        hiveColType = "DECIMAL("+precision+","+scale+")";
+        hiveColType = "Decimal("+precision+","+scale+")";
       }
       sb.append('`').append(col).append("` ").append(hiveColType);
 
@@ -242,7 +242,7 @@ public class TableDefWriter {
     }
 
     LOG.debug("Create statement: " + sb.toString());
-    
+
     return sb.toString();
   }
 
