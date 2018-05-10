@@ -128,8 +128,7 @@ public class TableDefWriter {
       if (null != inputTableName) {
         columnTypes = connManager.getColumnInfo(inputTableName);
       } else {
-        LOG.error("This database does not support free-form query column types.");
-        return null;
+        columnTypes = connManager.getColumnInfoForQuery(options.getSqlQuery());
       }
     }
     LOG.debug(columnTypes.toString());
