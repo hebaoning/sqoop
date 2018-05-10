@@ -243,7 +243,7 @@ public class TableDefWriter {
     }
 
     LOG.debug("Create statement: " + sb.toString());
-    
+
     return sb.toString();
   }
 
