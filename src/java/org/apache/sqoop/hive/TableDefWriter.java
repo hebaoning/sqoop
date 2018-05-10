@@ -241,8 +241,9 @@ public class TableDefWriter {
       // add location
       sb.append(" LOCATION '"+options.getHiveExternalTableDir()+"'");
     }
-//    LOG.info("Create statement: " + sb.toString());
+
     LOG.debug("Create statement: " + sb.toString());
+    
     return sb.toString();
   }
 
