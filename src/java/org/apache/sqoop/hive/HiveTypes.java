@@ -83,10 +83,7 @@ public final class HiveTypes {
    * in Hive, and we have to cast it to something more generic.
    */
   public static boolean isHiveTypeImprovised(int sqlType) {
-    return sqlType == Types.DATE || sqlType == Types.TIME
-        || sqlType == Types.TIMESTAMP
-        || sqlType == Types.DECIMAL
-        || sqlType == Types.NUMERIC;
+    return sqlType == Types.TIME;
   }
 }
 
