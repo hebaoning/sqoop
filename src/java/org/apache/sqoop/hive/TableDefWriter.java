@@ -131,7 +131,6 @@ public class TableDefWriter {
         columnTypes = connManager.getColumnInfoForQuery(options.getSqlQuery());
       }
     }
-    LOG.debug(columnTypes.toString());
 
     String [] colNames = getColumnNames();
     StringBuilder sb = new StringBuilder();
@@ -193,7 +192,7 @@ public class TableDefWriter {
         throw new IOException("Hive does not support the SQL type for column "
             + col);
       }
-      if ("DECIMAL".equals(hiveColType)){
+      if ("DECIMAL".equalsIgnoreCase(hiveColType)){
         int precision = columnTypes.get(col).get(1);
         int scale = columnTypes.get(col).get(2);
         hiveColType = "Decimal("+precision+","+scale+")";
