@@ -733,7 +733,7 @@ public class ClassWriter {
 
       if (getterMethod.equals("readString")) {
         sb.append("    this." + col + " = StringUtils.stripEnd(JdbcWritableBridge." +  getterMethod
-                + "(" + (i + 1) + ", __dbResults), null);\n");
+                + "(" + (i + 1) + ", __dbResults), \" \");\n");
       } else {
         sb.append("    this." + col + " = JdbcWritableBridge." +  getterMethod
                 + "(" + (i + 1) + ", __dbResults);\n");
