@@ -117,6 +117,7 @@ public class TableDefWriter {
    * @return the CREATE TABLE statement for the table to load into hive.
    */
   public String getCreateTableStmt() throws IOException {
+    String partitionType = "String";
     Map<String, List<Integer>> columnTypes;
     Properties userMapping = options.getMapColumnHive();
     Boolean isHiveExternalTableSet = !StringUtils.isBlank(options.getHiveExternalTableDir());
@@ -172,12 +173,7 @@ public class TableDefWriter {
     boolean first = true;
     String partitionKey = options.getHivePartitionKey();
     for (String col : colNames) {
-      if (col.equals(partitionKey)) {
-        throw new IllegalArgumentException("Partition key " + col + " cannot "
-            + "be a column to import.");
-      }
-
-      if (!first) {
+      if (!first && !col.equals(partitionKey)) {
         sb.append(", ");
       }
 
@@ -197,7 +193,12 @@ public class TableDefWriter {
         int scale = columnTypes.get(col).get(2);
         hiveColType = "Decimal("+precision+","+scale+")";
       }
-      sb.append('`').append(col).append("` ").append(hiveColType);
+
+      if (col.equals(partitionKey)) {
+          partitionType = hiveColType;
+      } else {
+        sb.append('`').append(col).append("` ").append(hiveColType);
+      }
 
       if (HiveTypes.isHiveTypeImprovised(colType)) {
         LOG.warn(
@@ -216,7 +217,7 @@ public class TableDefWriter {
     if (partitionKey != null) {
       sb.append("PARTITIONED BY (")
         .append(partitionKey)
-        .append(" STRING) ");
+        .append(" "+partitionType+") ");
      }
 
     sb.append("ROW FORMAT DELIMITED FIELDS TERMINATED BY '");
