@@ -195,7 +195,12 @@ public class TableDefWriter {
       if ("DECIMAL".equalsIgnoreCase(hiveColType)){
         int precision = columnTypes.get(col).get(1);
         int scale = columnTypes.get(col).get(2);
-        hiveColType = "Decimal("+precision+","+scale+")";
+        if (precision == 0 && scale == -127) {
+          // Oracle numeric type NUMBER without precision and scale
+          hiveColType = "Decimal";
+        } else {
+          hiveColType = "Decimal(" + precision + "," + scale + ")";
+        }
       }
       sb.append('`').append(col).append("` ").append(hiveColType);
 
